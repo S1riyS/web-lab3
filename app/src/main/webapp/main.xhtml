@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+    <meta charset="UTF-8" />
+    <title>Лабораторная работа №3 - Основная страница</title>
+
+    <!--  CSS  -->
+    <h:outputStylesheet name="src/css/header.css" />
+    <h:outputStylesheet name="src/css/main.css" />
+    <h:outputStylesheet name="src/css/libs/bootstrap.min.css" />
+
+    <!--  JS  -->
+    <h:outputScript library="src" name="js/main.js" target="body" />
+    <h:outputScript library="src" name="js/libs/jquery-3.7.1.min.js" />
+    <h:outputScript library="src" name="js/libs/sweetalert.min.js" />
+    <h:outputScript library="src" name="js/libs/js-big-decimal.min.js" />
+</h:head>
+
+
+<h:body>
+    <nav class="navbar navbar-light bg-light w-100">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                Лабораторная работа №3
+            </a>
+            <h:form>
+                <h:commandButton value="Начальная страница" action="index" />
+            </h:form>
+            <div class="d-flex align-items-center justify-content-center">
+                Анкудинов Кирилл Константинович, P3218
+                <a href="https://github.com/S1riyS/web-lab2" target="_blank" rel="noopener noreferrer">
+                    <button type="button" id="github-button" class="btn btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-github" viewBox="0 0 16 16">
+                            <path
+                                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
+                        </svg>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <main class="main row">
+            <div class="col-5">
+                <div class="image-box box">
+                    <div id="posints-data-obersver">
+                        <h:form id="plate-with-dots">
+                            <div id="points-data" style="visibility: hidden">
+                                <ui:repeat value="#{resultBean.resultList}" var="dot">
+                                    <span class="point" data-x="#{dot.x}" data-y="#{dot.y}"
+                                        data-result="#{dot.result}"></span>
+                                </ui:repeat>
+                            </div>
+                        </h:form>
+                    </div>
+
+                    <!-- </svg> -->
+                    <svg width="400" height="400" id="graph">
+                        <!-- X and Y axes -->
+                        <line id="axis-x" x1="40" y1="200" x2="360" y2="200" stroke="black" stroke-width="2"></line>
+                        <line id="axis-y" x1="200" y1="40" x2="200" y2="360" stroke="black" stroke-width="2"></line>
+
+                        <!-- Other elements for SVG (arrows, shapes, labels) -->
+                        <polygon id="arrow-x" points="360,195 360,205 370,200" fill="black"></polygon>
+                        <polygon id="arrow-y" points="195,40 205,40 200,30" fill="black"></polygon>
+
+                        <!-- Rectangle -->
+                        <rect id="rect" x="200" y="200" width="100" height="50" fill="blue" opacity="0.5"></rect>
+
+                        <!-- Arc -->
+                        <path id="arc" d="M 200 250 A 50 50 0 0 1 150 200 L 200 200 Z" fill="blue" opacity="0.5">
+                        </path>
+
+                        <!-- Triangle -->
+                        <polygon id="triangle" points="200,200 200,100 300,200" fill="blue" opacity='0.5'></polygon>
+
+                        <!-- Axis labels and markers -->
+                        <text x="210" y="40" id="text-y" fill="black">Y</text>
+                        <text x="360" y="190" id="text-x" fill="black">X</text>
+
+                        <line id="mark-neg-rx" x1="100" y1="195" x2="100" y2="205" stroke="black" stroke-width="2">
+                        </line>
+                        <line id="mark-rx" x1="300" y1="195" x2="300" y2="205" stroke="black" stroke-width="2"></line>
+                        <line id="mark-ry" x1="195" y1="100" x2="205" y2="100" stroke="black" stroke-width="2"></line>
+                        <line id="mark-neg-ry" x1="195" y1="300" x2="205" y2="300" stroke="black" stroke-width="2">
+                        </line>
+
+                        <text x="97" y="195" id="label-neg-rx" class="small" fill="black">-R</text>
+                        <text x="303" y="195" id="label-rx" class="small" fill="black">R</text>
+                        <text x="210" y="303" id="label-neg-ry" class="small" fill="black">-R</text>
+                        <text x="210" y="97" id="label-ry" class="small" fill="black">R</text>
+                    </svg>
+                </div>
+
+                <div class="params-box box">
+                    <div class="col-md-12">
+                        <h:form class="row g-3" id="form">
+                            <h:panelGrid columns="2" id="legend-x">
+                                <h:panelGroup>
+                                    <h:outputLabel for="x-input" value="Координата X [-2; 2]" />
+                                    <h:selectOneMenu id="x-input" value="#{formBean.x}" required="true">
+                                        <f:selectItem itemValue="-2" itemLabel="-2" />
+                                        <f:selectItem itemValue="-1.5" itemLabel="-1.5" />
+                                        <f:selectItem itemValue="-1" itemLabel="-1" />
+                                        <f:selectItem itemValue="-0.5" itemLabel="-0.5" />
+                                        <f:selectItem itemValue="0" itemLabel="0" />
+                                        <f:selectItem itemValue="0.5" itemLabel="0.5" />
+                                        <f:selectItem itemValue="1" itemLabel="1" />
+                                        <f:selectItem itemValue="1.5" itemLabel="1.5" />
+                                        <f:selectItem itemValue="2" itemLabel="2" />
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+
+                                <h:panelGroup>
+                                    <h:outputLabel for="y-input" value="Координата Y [-3; 5]" />
+                                    <p:inputText id="y-input" value="#{formBean.y}" required="true">
+                                    </p:inputText>
+                                </h:panelGroup>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="1" id="legend-r">
+                                <h:panelGroup>
+                                    <h:outputLabel for="r-select" value="Радиус R" />
+                                    <h:selectOneMenu id="r-select" value="#{formBean.r}" required="true">
+                                        <f:selectItem itemValue="1" itemLabel="1" />
+                                        <f:selectItem itemValue="2" itemLabel="2" />
+                                        <f:selectItem itemValue="3" itemLabel="3" />
+                                        <f:selectItem itemValue="4" itemLabel="4" />
+                                        <f:selectItem itemValue="5" itemLabel="5" />
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGrid>
+
+                            <h:commandButton id="submit" styleClass="btn btn-primary" value="Проверить"
+                                action="#{resultBean.addResult()}" onclick="return validateForm();">
+                                <f:ajax execute="@form" render="results-table plate-with-dots" />
+                            </h:commandButton>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-7 d-grid gap-1">
+                <p:dataTable id="results-table" tableStyleClass="main__table" var="result"
+                    value="#{resultBean.resultList}" emptyMessage="" sortable="true">
+
+                    <p:column headerText="X">
+                        <h:outputText value="#{result.x}" />
+                    </p:column>
+
+                    <p:column headerText="Y">
+                        <h:outputText value="#{result.y}" />
+                    </p:column>
+
+                    <p:column headerText="R">
+                        <h:outputText value="#{result.r}" />
+                    </p:column>
+
+                    <p:column headerText="Result">
+                        <h:outputText styleClass="${result.classSuccess}" value="#{result.stringSuccess}" />
+                    </p:column>
+
+                    <p:column headerText="Time">
+                        <h:outputText value="#{result.createdAt}" />
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </main>
+    </div>
+</h:body>
+
+</html>

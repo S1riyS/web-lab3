@@ -1,0 +1,42 @@
+* {
+    font-family: sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.image-box {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.graph {
+    width: 400px;
+    height: 400px;
+}
+
+#graph {
+    cursor: pointer;
+}
+
+label {
+    width: 100%;
+}
+
+select,
+input {
+    width: 100%;
+    height: 36px
+}
+
+.hit {
+    color: #72b043 !important;
+}
+
+.miss {
+    color: #e12729 !important;
+}
