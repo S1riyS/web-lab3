@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
 @ToString
 @NoArgsConstructor
 @Table(name = "results")
-public class ResultModel implements Serializable {
+public class DotModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,27 +23,27 @@ public class ResultModel implements Serializable {
     @Column(name = "r", nullable = false)
     private float r;
     @Column(name = "is_hit", nullable = false)
-    private boolean result;
-    @Column(name = "execution_time", nullable = false)
-    private long executionTime;
+    private boolean hit;
     @Column(name = "created_at")
     private ZonedDateTime createdAt;
 
-    public ResultModel(float x, float y, float r, boolean result, long executionTime, ZonedDateTime createdAt) {
+    public DotModel(float x, float y, float r, boolean hit, ZonedDateTime createdAt) {
         this.x = x;
         this.y = y;
         this.r = r;
-        this.result = result;
-        this.executionTime = executionTime;
+        this.hit = hit;
         this.createdAt = createdAt;
     }
 
-    public ResultModel(ResultModel sourceResult) {
+    public DotModel(DotModel sourceResult) {
         this.id = sourceResult.id;
         this.x = sourceResult.getX();
         this.y = sourceResult.getY();
-        this.r = sourceResult.getR();
-        this.result = checkHit();
+        this.r = sourceResult.getR();Добавить инпут в форму - селект из двух вариантов - паук и муравей. 
+        SpidetDot и AntDot - наследуется от Dot. Dot теперь становится абстрактным классом. 
+        * SpiderDot - legsQuantity (рандомного/либо инпут)
+        * AntDot - bodyColor (рандомно или инупт). 
+        this.hit = checkHit();
         this.createdAt = sourceResult.createdAt;
     }
 
@@ -56,10 +56,10 @@ public class ResultModel implements Serializable {
     }
 
     public String getStringSuccess() {
-        return result ? "Попадание" : "Промах";
+        return hit ? "Попадание" : "Промах";
     }
 
     public String getClassSuccess() {
-        return result ? "hit" : "miss";
+        return hit ? "hit" : "miss";
     }
 }

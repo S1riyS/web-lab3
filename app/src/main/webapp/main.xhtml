@@ -55,7 +55,7 @@
                     <div id="posints-data-obersver">
                         <h:form id="plate-with-dots">
                             <div id="points-data" style="visibility: hidden">
-                                <ui:repeat value="#{resultBean.getResultList()}" var="dot">
+                                <ui:repeat value="#{controllerBean.getDotsList()}" var="dot">
                                     <span class="point" data-x="#{dot.x}" data-y="#{dot.y}" data-r="#{dot.r}"
                                         data-result="#{dot.isHit}"></span>
                                 </ui:repeat>
@@ -144,7 +144,7 @@
                             </h:inputHidden>
 
                             <h:commandButton id="submit" styleClass="btn btn-primary" value="Проверить"
-                                action="#{resultBean.addResult()}" onclick="return validateForm();">
+                                action="#{controllerBean.addDot()}" onclick="return validateForm();">
                                 <f:ajax execute="@form" render="results-table plate-with-dots" />
                             </h:commandButton>
                         </h:form>
@@ -153,7 +153,7 @@
             </div>
 
             <div class="col-7 d-grid gap-1">
-                <ui:param name="resultList" value="#{resultBean.getResultList()}" />
+                <ui:param name="resultList" value="#{controllerBean.getDotsList()}" />
                 <p:dataTable id="results-table" tableStyleClass="main__table" var="result" value="#{resultList}"
                     emptyMessage="" sortable="true">
 

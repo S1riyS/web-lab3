@@ -9,35 +9,35 @@ import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 
-import ru.s1riys.lab3.dto.RequestCreateResultDTO;
-import ru.s1riys.lab3.dto.ResponseResultDTO;
-import ru.s1riys.lab3.services.ResultService;
+import ru.s1riys.lab3.dto.RequestCreateDotDTO;
+import ru.s1riys.lab3.dto.ResponseDotDTO;
+import ru.s1riys.lab3.services.DotService;
 
 @Data
-@Named("resultBean")
+@Named("controllerBean")
 @SessionScoped
 @ManagedBean
-public class ResultBean implements Serializable {
-    private ResultService resultService = new ResultService();
+public class ControllerBean implements Serializable {
+    private DotService dotService = new DotService();
 
     @Inject
     private FormBean formBean;
 
-    public void addResult() {
-        RequestCreateResultDTO request = new RequestCreateResultDTO();
+    public void addDot() {
+        RequestCreateDotDTO request = new RequestCreateDotDTO();
         request.x = formBean.getX();
         request.y = formBean.getY();
         request.r = formBean.getR();
-        resultService.addResult(request);
+        dotService.add(request);
     }
 
-    public List<ResponseResultDTO> getResultList() {
+    public List<ResponseDotDTO> getDotsList() {
         String userTimezone = formBean.getTimezone();
         System.out.println("Timezone: " + userTimezone);
         if (userTimezone == null) {
             userTimezone = "UTC";
         }
-        return resultService.getResultList(userTimezone);
+        return dotService.getAll(userTimezone);
     }
 
     public FormBean getMessageBean() {

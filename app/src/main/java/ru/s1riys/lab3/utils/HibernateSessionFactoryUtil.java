@@ -3,7 +3,7 @@ package ru.s1riys.lab3.utils;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import ru.s1riys.lab3.models.ResultModel;
+import ru.s1riys.lab3.models.DotModel;
 
 public class HibernateSessionFactoryUtil {
     private static SessionFactory sessionFactory;
@@ -16,7 +16,7 @@ public class HibernateSessionFactoryUtil {
 
             try {
                 Configuration configuration = new Configuration().configure();
-                configuration.addAnnotatedClass(ResultModel.class);
+                configuration.addAnnotatedClass(DotModel.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
