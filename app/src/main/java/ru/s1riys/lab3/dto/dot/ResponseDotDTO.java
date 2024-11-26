@@ -1,4 +1,4 @@
-package ru.s1riys.lab3.dto;
+package ru.s1riys.lab3.dto.dot;
 
 import lombok.Data;
 
@@ -9,4 +9,6 @@ public class ResponseDotDTO {
     public Float r;
     public Boolean isHit;
     public String createdAt;
+    public String bodyColor;
+    public Integer legsQuantity;
 }

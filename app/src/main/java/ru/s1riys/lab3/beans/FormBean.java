@@ -17,5 +17,6 @@ public class FormBean implements Serializable {
     private float x;
     private float y;
     private float r;
+    private String modelType;
     private String timezone;
 }

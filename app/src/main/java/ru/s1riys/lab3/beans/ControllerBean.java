@@ -8,9 +8,8 @@ import jakarta.inject.Named;
 import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
-
-import ru.s1riys.lab3.dto.RequestCreateDotDTO;
-import ru.s1riys.lab3.dto.ResponseDotDTO;
+import ru.s1riys.lab3.dto.dot.RequestCreateDotDTO;
+import ru.s1riys.lab3.dto.dot.ResponseDotDTO;
 import ru.s1riys.lab3.services.DotService;
 
 @Data
@@ -28,15 +27,14 @@ public class ControllerBean implements Serializable {
         request.x = formBean.getX();
         request.y = formBean.getY();
         request.r = formBean.getR();
+        request.modelType = formBean.getModelType();
         dotService.add(request);
     }
 
     public List<ResponseDotDTO> getDotsList() {
         String userTimezone = formBean.getTimezone();
-        System.out.println("Timezone: " + userTimezone);
-        if (userTimezone == null) {
+        if (userTimezone == null)
             userTimezone = "UTC";
-        }
         return dotService.getAll(userTimezone);
     }
 

@@ -1,39 +1,45 @@
 package ru.s1riys.lab3.services;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import ru.s1riys.lab3.dao.IDotDAO;
-import ru.s1riys.lab3.dao.DotDAOImpl;
-import ru.s1riys.lab3.dto.RequestCreateDotDTO;
-import ru.s1riys.lab3.dto.ResponseDotDTO;
+import ru.s1riys.lab3.dto.dot.RequestCreateDotDTO;
+import ru.s1riys.lab3.dto.dot.ResponseDotDTO;
+import ru.s1riys.lab3.mappers.DotMapper;
+import ru.s1riys.lab3.models.AntDotModel;
 import ru.s1riys.lab3.models.DotModel;
+import ru.s1riys.lab3.models.SpiderDotModel;
+import ru.s1riys.lab3.repositories.DotRepositoryImpl;
+import ru.s1riys.lab3.repositories.IDotRepository;
 
 public class DotService {
-    private IDotDAO resultDAO = new DotDAOImpl();
+    private IDotRepository dotRepository = new DotRepositoryImpl();
+    private DotMapper mapper = new DotMapper();
 
-    private DotModel currentDot;
     private List<DotModel> resultList;
 
-    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    private Map<String, Class<? extends DotModel>> modelTypes = new HashMap<>() {
+        {
+            put("ant", AntDotModel.class);
+            put("spider", SpiderDotModel.class);
+        }
+    };
 
     public DotService() {
-        currentDot = new DotModel();
         updateLocal();
     }
 
     public void add(RequestCreateDotDTO request) {
-        currentDot.setX(request.x);
-        currentDot.setY(request.y);
-        currentDot.setR(request.r);
+        System.out.println("Model type " + request.modelType);
+        Class<? extends DotModel> modelClass = modelTypes.get(request.modelType);
+        if (modelClass == null) {
+            System.out.println("Unknown model type: " + request.modelType);
+            return;
+        }
 
-        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("UTC"));
-        currentDot.setCreatedAt(currentTime);
-
-        DotModel resultInDatabase = new DotModel(currentDot);
-        resultDAO.save(resultInDatabase);
+        DotModel resultInDatabase = mapper.toEntity(request, modelClass);
+        dotRepository.save(resultInDatabase);
 
         System.out.print("Adding new Result: ");
         System.out.println(resultInDatabase);
@@ -42,24 +48,12 @@ public class DotService {
     }
 
     public List<ResponseDotDTO> getAll(String userTimezone) {
-        List<ResponseDotDTO> resultList = new java.util.ArrayList<>();
-        for (DotModel result : this.resultList) {
-            ResponseDotDTO resultDTO = new ResponseDotDTO();
-            resultDTO.x = result.getX();
-            resultDTO.y = result.getY();
-            resultDTO.r = result.getR();
-            resultDTO.isHit = result.isHit();
-
-            // Convert to user timezone
-            ZonedDateTime userTime = result.getCreatedAt().withZoneSameInstant(ZoneId.of(userTimezone));
-            resultDTO.createdAt = timeFormatter.format(userTime);
-            resultList.add(resultDTO);
-        }
-
-        return resultList;
+        return resultList.stream()
+                .map(result -> mapper.toDTO(result, userTimezone))
+                .toList();
     }
 
     private void updateLocal() {
-        resultList = resultDAO.getAll();
+        resultList = dotRepository.getAll();
     }
 }

@@ -4,17 +4,18 @@ import lombok.*;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-@Table(name = "results")
-public class DotModel implements Serializable {
+public abstract class DotModel implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private int id;
     @Column(name = "x", nullable = false)
     private float x;
@@ -27,24 +28,12 @@ public class DotModel implements Serializable {
     @Column(name = "created_at")
     private ZonedDateTime createdAt;
 
-    public DotModel(float x, float y, float r, boolean hit, ZonedDateTime createdAt) {
+    public DotModel(Float x, Float y, Float r) {
         this.x = x;
         this.y = y;
         this.r = r;
-        this.hit = hit;
-        this.createdAt = createdAt;
-    }
-
-    public DotModel(DotModel sourceResult) {
-        this.id = sourceResult.id;
-        this.x = sourceResult.getX();
-        this.y = sourceResult.getY();
-        this.r = sourceResult.getR();Добавить инпут в форму - селект из двух вариантов - паук и муравей. 
-        SpidetDot и AntDot - наследуется от Dot. Dot теперь становится абстрактным классом. 
-        * SpiderDot - legsQuantity (рандомного/либо инпут)
-        * AntDot - bodyColor (рандомно или инупт). 
         this.hit = checkHit();
-        this.createdAt = sourceResult.createdAt;
+        this.createdAt = ZonedDateTime.now(ZoneId.of("UTC"));
     }
 
     private boolean checkHit() {
