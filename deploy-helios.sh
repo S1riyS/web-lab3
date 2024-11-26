@@ -1,8 +1,7 @@
 #!/bin/bash
 
-HELIOS_WILDFLY_PATH="~/web/lab2/wildfly-preview-34.0.0.Beta1"
 LOCAL_WAR_PATH="$(pwd)/app/build/libs/app.war"
-HELIOS_WAR_PATH="~/web/lab2"
+HELIOS_WAR_PATH="/home/studs/s413732/web/wildfly/standalone/deployments"
 
 if ./gradlew clean build; then
     echo "Copying WAR file..."
