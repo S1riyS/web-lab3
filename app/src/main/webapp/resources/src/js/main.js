@@ -66,6 +66,7 @@ class GraphService {
             const x = parseFloat(point.getAttribute("data-x"));
             const y = parseFloat(point.getAttribute("data-y"));
             const r = parseInt(point.getAttribute("data-r"));
+            const color = point.getAttribute("data-color");
             const result = point.getAttribute("data-result") === "true";
 
             if (r !== rFilterValue) return;
@@ -76,10 +77,14 @@ class GraphService {
 
             // Создаем круг для точки
             const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            // Size and position
             circle.setAttribute("cx", svgX);
             circle.setAttribute("cy", svgY);
             circle.setAttribute("r", 2);
-            circle.setAttribute("fill", result ? "green" : "red");
+            // Color
+            if (color) circle.setAttribute("fill", color);
+            else circle.setAttribute("fill", result ? "green" : "red");
+
             circle.classList.add("data-point");
 
             // Добавляем точку на svg

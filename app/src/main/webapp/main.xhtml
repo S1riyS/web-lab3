@@ -57,7 +57,7 @@
                             <div id="points-data" style="visibility: hidden">
                                 <ui:repeat value="#{controllerBean.getDotsList()}" var="dot">
                                     <span class="point" data-x="#{dot.x}" data-y="#{dot.y}" data-r="#{dot.r}"
-                                        data-result="#{dot.isHit}"></span>
+                                        data-result="#{dot.isHit}" data-color="#{dot.bodyColor}"></span>
                                 </ui:repeat>
                             </div>
                         </h:form>
@@ -104,6 +104,17 @@
                 <div class="params-box box">
                     <div class="col-md-12">
                         <h:form class="row g-3" id="form">
+                            <h:panelGrid columns="1" id="legend-model-type">
+                                <h:panelGroup>
+                                    <h:outputLabel for="model-type-select" value="Вид точки:" />
+                                    <h:selectOneMenu id="model-type-select" value="#{formBean.modelType}"
+                                        required="true">
+                                        <f:selectItem itemValue="ant" itemLabel="Ant" />
+                                        <f:selectItem itemValue="spider" itemLabel="Spider" />
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGrid>
+
                             <h:panelGrid columns="2" id="legend-x">
                                 <h:panelGroup>
                                     <h:outputLabel for="x-input" value="Координата X [-2; 2]" />
@@ -175,6 +186,12 @@
 
                     <p:column headerText="Time">
                         <h:outputText value="#{result.createdAt}" />
+                    </p:column>
+                    <p:column headerText="Color">
+                        <h:outputText value="#{result.bodyColor}" />
+                    </p:column>
+                    <p:column headerText="Legs">
+                        <h:outputText value="#{result.legsQuantity}" />
                     </p:column>
                 </p:dataTable>
             </div>
