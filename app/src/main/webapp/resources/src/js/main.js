@@ -53,7 +53,7 @@ class GraphService {
         this.MAX_SVG_R = 130;
     }
 
-    drawPoints() {
+    drawPoints(rFilterValue) {
         console.log("drawPoints called");
         // Очищаем старые точки перед отрисовкой новых
         this.svg.querySelectorAll(".data-point").forEach(point => point.remove());
@@ -65,7 +65,10 @@ class GraphService {
             // Извлекаем данные из атрибутов
             const x = parseFloat(point.getAttribute("data-x"));
             const y = parseFloat(point.getAttribute("data-y"));
+            const r = parseInt(point.getAttribute("data-r"));
             const result = point.getAttribute("data-result") === "true";
+
+            if (r !== rFilterValue) return;
 
             // Преобразуем координаты для SVG-системы (центр 250,250 и масштаб)
             const svgX = 200 + x * (this.MAX_SVG_R / 5);
@@ -124,8 +127,10 @@ class GraphService {
         document.getElementById("label-ry").setAttribute("y", this.CENTER_Y - (currentSvgR + 3));
     }
 
-    onRadisChange(r) {
-        this.redrawGraph(r);
+    onRadisChange(strR) {
+        const intR = parseInt(strR);
+        this.redrawGraph(intR);
+        this.drawPoints(intR);
     }
 
     $clickHandler(event) {
@@ -175,6 +180,10 @@ class FormService {
         document.querySelector('input[id$=":y-input"]').value = y
     }
 
+    setTimezone(timezone) {
+        document.querySelector('input[id$=":timezone-input"]').value = timezone
+    }
+
     setData(x, y) {
         this.setX(x);
         this.setY(y);
@@ -218,19 +227,25 @@ function onInit() {
 
     formService.addRadiusChangeObserver(graphService);
 
+    // Setting up timezone
+    const currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    formService.setTimezone(currentTimezone);
+
     // Setting up initial radius
     const INITIAL_R = 5;
     formService.rSelect.value = INITIAL_R;
     graphService.redrawGraph(INITIAL_R);
 
     // Initial draw points
-    graphService.drawPoints();
+    graphService.drawPoints(INITIAL_R);
 
     // MutationObserver для отслеживания появления новых точек
     const resultElement = document.getElementById("posints-data-obersver");
     if (resultElement) {
         const observer = new MutationObserver(function () {
-            graphService.drawPoints();
+            const currentData = formService.getData();
+            const currentR = parseInt(currentData.r);
+            graphService.drawPoints(currentR);
         });
 
         observer.observe(resultElement, {

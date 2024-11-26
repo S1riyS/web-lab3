@@ -55,9 +55,9 @@
                     <div id="posints-data-obersver">
                         <h:form id="plate-with-dots">
                             <div id="points-data" style="visibility: hidden">
-                                <ui:repeat value="#{resultBean.resultList}" var="dot">
-                                    <span class="point" data-x="#{dot.x}" data-y="#{dot.y}"
-                                        data-result="#{dot.result}"></span>
+                                <ui:repeat value="#{resultBean.getResultList()}" var="dot">
+                                    <span class="point" data-x="#{dot.x}" data-y="#{dot.y}" data-r="#{dot.r}"
+                                        data-result="#{dot.isHit}"></span>
                                 </ui:repeat>
                             </div>
                         </h:form>
@@ -74,14 +74,14 @@
                         <polygon id="arrow-y" points="195,40 205,40 200,30" fill="black"></polygon>
 
                         <!-- Rectangle -->
-                        <rect id="rect" x="200" y="200" width="100" height="50" fill="blue" opacity="0.5"></rect>
+                        <rect id="rect" x="200" y="200" width="100" height="50" fill="blue" opacity="0.35"></rect>
 
                         <!-- Arc -->
-                        <path id="arc" d="M 200 250 A 50 50 0 0 1 150 200 L 200 200 Z" fill="blue" opacity="0.5">
+                        <path id="arc" d="M 200 250 A 50 50 0 0 1 150 200 L 200 200 Z" fill="blue" opacity="0.35">
                         </path>
 
                         <!-- Triangle -->
-                        <polygon id="triangle" points="200,200 200,100 300,200" fill="blue" opacity='0.5'></polygon>
+                        <polygon id="triangle" points="200,200 200,100 300,200" fill="blue" opacity="0.35"></polygon>
 
                         <!-- Axis labels and markers -->
                         <text x="210" y="40" id="text-y" fill="black">Y</text>
@@ -140,6 +140,9 @@
                                 </h:panelGroup>
                             </h:panelGrid>
 
+                            <h:inputHidden id="timezone-input" name="timezone-input" value="#{formBean.timezone}">
+                            </h:inputHidden>
+
                             <h:commandButton id="submit" styleClass="btn btn-primary" value="Проверить"
                                 action="#{resultBean.addResult()}" onclick="return validateForm();">
                                 <f:ajax execute="@form" render="results-table plate-with-dots" />
@@ -150,8 +153,9 @@
             </div>
 
             <div class="col-7 d-grid gap-1">
-                <p:dataTable id="results-table" tableStyleClass="main__table" var="result"
-                    value="#{resultBean.resultList}" emptyMessage="" sortable="true">
+                <ui:param name="resultList" value="#{resultBean.getResultList()}" />
+                <p:dataTable id="results-table" tableStyleClass="main__table" var="result" value="#{resultList}"
+                    emptyMessage="" sortable="true">
 
                     <p:column headerText="X">
                         <h:outputText value="#{result.x}" />
@@ -166,7 +170,7 @@
                     </p:column>
 
                     <p:column headerText="Result">
-                        <h:outputText styleClass="${result.classSuccess}" value="#{result.stringSuccess}" />
+                        <h:outputText value="#{result.isHit}" />
                     </p:column>
 
                     <p:column headerText="Time">

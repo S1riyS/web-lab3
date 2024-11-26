@@ -4,7 +4,7 @@ import lombok.*;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 
 @Entity
 @Getter
@@ -27,9 +27,9 @@ public class ResultModel implements Serializable {
     @Column(name = "execution_time", nullable = false)
     private long executionTime;
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private ZonedDateTime createdAt;
 
-    public ResultModel(float x, float y, float r, boolean result, long executionTime, Timestamp createdAt) {
+    public ResultModel(float x, float y, float r, boolean result, long executionTime, ZonedDateTime createdAt) {
         this.x = x;
         this.y = y;
         this.r = r;

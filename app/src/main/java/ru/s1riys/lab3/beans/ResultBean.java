@@ -1,8 +1,6 @@
 package ru.s1riys.lab3.beans;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 
 import lombok.Data;
@@ -10,50 +8,36 @@ import jakarta.inject.Named;
 import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
-import jakarta.annotation.PostConstruct;
 
-import ru.s1riys.lab3.dao.IResultDAO;
-import ru.s1riys.lab3.models.ResultModel;
+import ru.s1riys.lab3.dto.RequestCreateResultDTO;
+import ru.s1riys.lab3.dto.ResponseResultDTO;
+import ru.s1riys.lab3.services.ResultService;
 
 @Data
 @Named("resultBean")
 @SessionScoped
 @ManagedBean
 public class ResultBean implements Serializable {
-    @Inject
-    private IResultDAO resultDAO;
+    private ResultService resultService = new ResultService();
 
     @Inject
     private FormBean formBean;
 
-    private ResultModel currentResult;
-    private List<ResultModel> resultList;
-
-    @PostConstruct
-    private void initialize() {
-        currentResult = new ResultModel();
-        updateLocal();
-    }
-
     public void addResult() {
-        currentResult.setX(formBean.getX());
-        currentResult.setY(formBean.getY());
-        currentResult.setR(formBean.getR());
-
-        Timestamp currentTime = Timestamp.from(Instant.now());
-        currentResult.setCreatedAt(currentTime);
-
-        ResultModel resultInDatabase = new ResultModel(currentResult);
-        resultDAO.save(resultInDatabase);
-
-        System.out.print("Adding new Result: ");
-        System.out.println(resultInDatabase);
-
-        updateLocal();
+        RequestCreateResultDTO request = new RequestCreateResultDTO();
+        request.x = formBean.getX();
+        request.y = formBean.getY();
+        request.r = formBean.getR();
+        resultService.addResult(request);
     }
 
-    private void updateLocal() {
-        resultList = resultDAO.getAll();
+    public List<ResponseResultDTO> getResultList() {
+        String userTimezone = formBean.getTimezone();
+        System.out.println("Timezone: " + userTimezone);
+        if (userTimezone == null) {
+            userTimezone = "UTC";
+        }
+        return resultService.getResultList(userTimezone);
     }
 
     public FormBean getMessageBean() {
