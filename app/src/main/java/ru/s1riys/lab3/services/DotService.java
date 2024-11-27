@@ -17,43 +17,29 @@ public class DotService {
     private IDotRepository dotRepository = new DotRepositoryImpl();
     private DotMapper mapper = new DotMapper();
 
-    private List<DotModel> resultList;
-
-    private Map<String, Class<? extends DotModel>> modelTypes = new HashMap<>() {
+    private Map<String, Class<? extends DotModel>> modelClassByName = new HashMap<>() {
         {
             put("ant", AntDotModel.class);
             put("spider", SpiderDotModel.class);
         }
     };
 
-    public DotService() {
-        updateLocal();
-    }
-
     public void add(RequestCreateDotDTO request) {
-        System.out.println("Model type " + request.modelType);
-        Class<? extends DotModel> modelClass = modelTypes.get(request.modelType);
+        System.out.println("Model type " + request.modelTypeName);
+        Class<? extends DotModel> modelClass = modelClassByName.get(request.modelTypeName);
         if (modelClass == null) {
-            System.out.println("Unknown model type: " + request.modelType);
+            System.out.println("Unknown model type: " + request.modelTypeName);
             return;
         }
 
         DotModel resultInDatabase = mapper.toEntity(request, modelClass);
         dotRepository.save(resultInDatabase);
-
-        System.out.print("Adding new Result: ");
-        System.out.println(resultInDatabase);
-
-        updateLocal();
     }
 
     public List<ResponseDotDTO> getAll(String userTimezone) {
+        List<DotModel> resultList = dotRepository.getAll();
         return resultList.stream()
                 .map(result -> mapper.toDTO(result, userTimezone))
                 .toList();
-    }
-
-    private void updateLocal() {
-        resultList = dotRepository.getAll();
     }
 }

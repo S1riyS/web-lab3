@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.Data;
 import jakarta.inject.Named;
 import jakarta.annotation.ManagedBean;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import ru.s1riys.lab3.dto.dot.RequestCreateDotDTO;
@@ -27,7 +28,7 @@ public class ControllerBean implements Serializable {
         request.x = formBean.getX();
         request.y = formBean.getY();
         request.r = formBean.getR();
-        request.modelType = formBean.getModelType();
+        request.modelTypeName = formBean.getModelTypeName();
         dotService.add(request);
     }
 

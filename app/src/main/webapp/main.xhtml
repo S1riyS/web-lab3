@@ -107,7 +107,7 @@
                             <h:panelGrid columns="1" id="legend-model-type">
                                 <h:panelGroup>
                                     <h:outputLabel for="model-type-select" value="Вид точки:" />
-                                    <h:selectOneMenu id="model-type-select" value="#{formBean.modelType}"
+                                    <h:selectOneMenu id="model-type-select" value="#{formBean.modelTypeName}"
                                         required="true">
                                         <f:selectItem itemValue="ant" itemLabel="Ant" />
                                         <f:selectItem itemValue="spider" itemLabel="Spider" />
@@ -164,34 +164,38 @@
             </div>
 
             <div class="col-7 d-grid gap-1">
-                <ui:param name="resultList" value="#{controllerBean.getDotsList()}" />
-                <p:dataTable id="results-table" tableStyleClass="main__table" var="result" value="#{resultList}"
-                    emptyMessage="" sortable="true">
+                <p:dataTable id="results-table" tableStyleClass="main__table" var="dot"
+                    value="#{controllerBean.dotsList}" emptyMessage="" styleClass="table">
 
                     <p:column headerText="X">
-                        <h:outputText value="#{result.x}" />
+                        <h:outputText value="#{dot.x}">
+                            <f:convertNumber type="number" maxFractionDigits="3" groupingUsed="false" />
+                        </h:outputText>
                     </p:column>
 
                     <p:column headerText="Y">
-                        <h:outputText value="#{result.y}" />
+                        <h:outputText value="#{dot.y}">
+                            <f:convertNumber type="number" maxFractionDigits="3" groupingUsed="false" />
+                        </h:outputText>
                     </p:column>
 
                     <p:column headerText="R">
-                        <h:outputText value="#{result.r}" />
+                        <h:outputText value="#{dot.r}" />
                     </p:column>
 
                     <p:column headerText="Result">
-                        <h:outputText value="#{result.isHit}" />
+                        <h:outputText value="#{dot.isHit ? 'Попадание' : 'Промах'}"
+                            styleClass="#{dot.isHit ? 'hit' : 'miss'}" />
                     </p:column>
 
-                    <p:column headerText="Time">
-                        <h:outputText value="#{result.createdAt}" />
+                    <p:column headerText=" Time">
+                        <h:outputText value="#{dot.createdAt}" />
                     </p:column>
                     <p:column headerText="Color">
-                        <h:outputText value="#{result.bodyColor}" />
+                        <h:outputText value="#{dot.bodyColor}" />
                     </p:column>
                     <p:column headerText="Legs">
-                        <h:outputText value="#{result.legsQuantity}" />
+                        <h:outputText value="#{dot.legsQuantity}" />
                     </p:column>
                 </p:dataTable>
             </div>
